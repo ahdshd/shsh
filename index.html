@@ -4261,7 +4261,7 @@ body.theme-exited .theme-toggle{display:none !important}
                 class="wish-button"
                 id="wishButton">
 
-                جاهزة ✨
+                جاهزة
 
             </button>
 
@@ -5143,13 +5143,15 @@ async function startMicrophone(){
     if(microphoneRunning)
         return;
 
+    // Microphone access requires a secure context (HTTPS or localhost).
     if(
+        !window.isSecureContext ||
         !navigator.mediaDevices ||
         !navigator.mediaDevices.getUserMedia
     ){
-
-        manualMode();
-
+        micStatus.textContent =
+            "حتى يشتغل المايك، افتحي الموقع عبر VS Code باستخدام Live Server (localhost) أو رابط HTTPS، مو بفتح ملف HTML مباشرة. وتكدرين تطفين الشموع باللمس 🤍";
+        micStatus.classList.remove("ready");
         return;
     }
 
@@ -5217,9 +5219,25 @@ async function startMicrophone(){
     }
 
     catch(error){
+        console.error("Microphone error:", error);
+        micStatus.classList.remove("ready");
 
-        manualMode();
+        if(error && error.name === "NotAllowedError"){
+            micStatus.textContent =
+                "إذن المايك مرفوض أو محظور. اضغطي رمز القفل بجانب رابط الموقع، ثم إعدادات الموقع > الميكروفون > سماح، وبعدها حدّثي الصفحة وجربي مرة ثانية. 🤍";
+        } else if(error && error.name === "NotFoundError"){
+            micStatus.textContent =
+                "ما لكيت مايكروفون متصل بالجهاز. وصّلي مايك أو استخدمي اللمس لإطفاء الشموع 🤍";
+        } else if(error && error.name === "NotReadableError"){
+            micStatus.textContent =
+                "المايك مستخدم من برنامج ثاني أو ما يشتغل حالياً. سكّري البرامج اللي تستخدمه وجربي مرة ثانية، أو لمسي الشموع 🤍";
+        } else {
+            micStatus.textContent =
+                "ما اشتغل المايك. تأكدي من إذن الميكروفون وإعدادات المتصفح، أو لمسي الشموع لإطفائها 🤍";
+        }
 
+        // Keep the button visible so the user can retry after granting permission.
+        document.getElementById("micButton").style.display = "inline-flex";
     }
 
 }
@@ -5230,10 +5248,6 @@ function manualMode(){
         "الميكروفون غير متاح، لمسي الشموع لإطفائها 🤍";
 
     micStatus.classList.remove("ready");
-
-    document
-    .getElementById("micButton")
-    .style.display = "none";
 
 }
 
@@ -5429,8 +5443,8 @@ const personalMessage = `
 وأتمنى تبقين بنفسج...
 لأن هذا الشي بالذات،
 أحبّه بيج.
-كل سنة وانتي بخير،
-وكل سنة وانتي أجمل من السنة اللي قبلها.
+كل سنة وإنتِ بخير،
+وكل سنة وإنتِ أجمل من السنة اللي قبلها.
 أحبج. 🤍
 
 `;
@@ -6381,7 +6395,7 @@ body.theme-exited .theme-toggle{
     <button id="shahoodiNoteClose" type="button" aria-label="إغلاق">×</button>
     <div style="font-size:30px;margin-bottom:10px;color:#ffd0e6">✧ ♡ ✧</div>
     <h2 id="shahoodiNoteTitle">إلى ملاكي شهودي</h2>
-    <p>كل سنة وانتي أجمل صدفة وأحلى شخص بحياتي.<br>يا رب تبقى ضحكتچ نور أيامي، وتتحقق كل أمنياتچ وحدة وحدة.<br><strong style="color:#ffd0e6">أحبچ اليوم وباچر وكل العمر 🤍</strong></p>
+    <p>كل سنة وإنتِ أجمل صدفة وأحلى شخص بحياتي.<br>يا رب تبقى ضحكتچ نور أيامي، وتتحقق كل أمنياتچ وحدة وحدة.<br><strong style="color:#ffd0e6">أحبچ اليوم وباچر وكل العمر 🤍</strong></p>
   </div>
 </div>
 <script id="shahoodi-extra-polish-js">
