@@ -1780,7 +1780,8 @@ button{
 }
 
 .wish-title span{
-    color:#eab07f;
+    color:#f2b6d5;
+    text-shadow:0 0 28px rgba(255,120,190,.22);
 }
 
 .wish-text{
@@ -2299,84 +2300,113 @@ button{
    MESSAGE
 ========================= */
 
-.message-screen{
+ .message-screen{
     position:absolute;
     inset:0;
     z-index:28;
-
     display:flex;
     align-items:center;
     justify-content:center;
-
     text-align:center;
-
+    padding:22px 15px;
+    box-sizing:border-box;
     background:
-        radial-gradient(
-            circle at center,
-            rgba(255,160,100,.12),
-            transparent 38%
-        ),
-        #07050a;
-
+      radial-gradient(ellipse at 50% 0%, rgba(255,75,177,.25), transparent 48%),
+      radial-gradient(ellipse at 0% 100%, rgba(255,105,190,.25), transparent 42%),
+      radial-gradient(ellipse at 100% 100%, rgba(151,65,255,.24), transparent 42%),
+      linear-gradient(145deg, rgba(9,3,18,.97), rgba(31,8,43,.97) 52%, rgba(10,4,22,.98));
     opacity:0;
     visibility:hidden;
-
-    transition:
-        opacity 1.2s ease,
-        visibility 1.2s ease;
-
+    transition:opacity .65s ease, visibility .65s ease;
     cursor:pointer;
+    overflow:hidden;
+    isolation:isolate;
 }
-
-.message-screen.show{
-    opacity:1;
-    visibility:visible;
+.message-screen::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:-1;
+    pointer-events:none;
+    opacity:.65;
+    background-image:
+      radial-gradient(2px 2px at 12% 18%, #fff 50%, transparent 70%),
+      radial-gradient(1.5px 1.5px at 76% 22%, #ffd7f5 50%, transparent 70%),
+      radial-gradient(2px 2px at 88% 70%, #fff 50%, transparent 70%),
+      radial-gradient(1px 1px at 22% 82%, #ffd7f5 50%, transparent 70%),
+      radial-gradient(1px 1px at 53% 12%, #fff 50%, transparent 70%);
+    background-size:230px 210px,280px 260px,310px 290px,250px 240px,190px 220px;
 }
-
+.message-screen.show{opacity:1;visibility:visible;}
 .message-content{
-    width:min(90%,680px);
-    max-width:680px;
-
+    position:relative;
+    width:min(100%, 760px);
+    max-width:760px;
+    max-height:calc(100% - 12px);
+    overflow-y:auto;
+    box-sizing:border-box;
     margin:0 auto;
-
-    padding:0 15px;
-
+    padding:clamp(58px,8vh,90px) clamp(22px,5vw,62px) clamp(30px,5vh,55px);
     text-align:center;
-
     overflow-wrap:break-word;
+    border:1px solid rgba(255,190,237,.58);
+    border-radius:34px;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(255,94,194,.14), transparent 58%),
+      linear-gradient(145deg, rgba(44,15,56,.84), rgba(16,8,32,.91));
+    box-shadow:0 0 45px rgba(255,72,190,.18), 0 0 100px rgba(145,55,255,.12), inset 0 0 35px rgba(255,255,255,.025);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    animation:messageCardIn .75s cubic-bezier(.2,.8,.2,1) both;
+    cursor:default;
 }
-
+.message-content::before{
+    content:"×";
+    position:absolute;
+    top:18px;
+    right:18px;
+    width:42px;
+    height:42px;
+    display:grid;
+    place-items:center;
+    border-radius:50%;
+    border:1px solid rgba(255,210,245,.3);
+    background:rgba(255,255,255,.055);
+    color:#fff0fb;
+    font:400 28px/1 Arial,sans-serif;
+    box-shadow:0 0 18px rgba(255,100,200,.1);
+}
+@keyframes messageCardIn{
+    from{opacity:0;transform:translateY(18px) scale(.97);}
+    to{opacity:1;transform:translateY(0) scale(1);}
+}
 .message-small{
-    font-size:9px;
-    letter-spacing:5px;
-
-    color:rgba(255,255,255,.35);
+    font-family:"Cairo",sans-serif;
+    font-size:clamp(20px,4vw,34px);
+    letter-spacing:8px;
+    color:#ffd6f3;
+    text-shadow:0 0 18px rgba(255,115,205,.55);
+    margin-bottom:12px;
 }
-
 .message-name{
-    margin-top:22px;
-
-    font-size:clamp(40px,10vw,72px);
-
-    color:#eab07f;
+    font-family:"Cairo",sans-serif;
+    font-weight:800;
+    margin-top:12px;
+    font-size:clamp(34px,7.5vw,64px);
+    line-height:1.55;
+    color:#ffd0ed;
+    text-shadow:0 0 12px rgba(255,130,211,.6), 0 0 34px rgba(235,70,177,.36);
 }
-
 .message-text{
+    font-family:"Cairo",sans-serif;
     width:100%;
     max-width:650px;
-
-    margin:25px auto 0;
-
+    margin:22px auto 0;
     padding:0 5px;
-
-    color:rgba(255,255,255,.65);
-
-    font-size:clamp(15px,4vw,20px);
-
-    line-height:2.3;
-
+    color:rgba(255,237,251,.91);
+    font-size:clamp(15px,3.6vw,21px);
+    line-height:2.15;
     text-align:center;
-
     overflow-wrap:anywhere;
     word-break:normal;
 }
@@ -3422,28 +3452,15 @@ button{
     }
 
     .message-content{
-        width:calc(100% - 20px);
-        max-width:680px;
-
-        padding:0 10px;
+        width:100%;
+        max-width:760px;
+        padding:62px 20px 30px;
+        border-radius:26px;
     }
 
-    .message-small{
-        font-size:8px;
-        letter-spacing:4px;
-    }
-
-    .message-name{
-        font-size:clamp(40px,10vw,65px);
-    }
-
-    .message-text{
-        font-size:clamp(14px,4vw,18px);
-
-        line-height:2.15;
-
-        padding:0;
-    }
+    .message-small{font-size:22px;letter-spacing:6px;}
+    .message-name{font-size:clamp(32px,8vw,54px);}
+    .message-text{font-size:clamp(14px,4vw,18px);line-height:2.05;padding:0;}
 
     .celebration-content{
         width:calc(100% - 20px);
@@ -4139,7 +4156,7 @@ body.theme-exited .theme-toggle{display:none !important}
                 class="glass-button"
                 id="enterButton">
 
-                جاهزه ✨ &nbsp;&nbsp; ←
+                جاهزه &nbsp;&nbsp; 
 
             </button>
 
@@ -4341,12 +4358,10 @@ body.theme-exited .theme-toggle{display:none !important}
 
         <div class="message-content">
 
-            <div class="message-small">
-                A LITTLE MESSAGE FOR YOU
-            </div>
+            <div class="message-small" aria-hidden="true">✧ ♡ ✧</div>
 
             <div class="message-name">
-                ملاكي
+                رسالة لشهودي
             </div>
 
             <div
@@ -4885,13 +4900,28 @@ document
     "click",
     function(){
 
+        // إخفاء زر الرسالة والنافذة فقط عند الضغط على «جاهزه»
+        const noteButton = document.getElementById('shahoodiNoteButton');
+        const noteBackdrop = document.getElementById('shahoodiNoteBackdrop');
+        if (noteButton) {
+            noteButton.style.transition = 'opacity .25s ease, transform .25s ease';
+            noteButton.style.opacity = '0';
+            noteButton.style.transform = 'translateY(10px)';
+            setTimeout(() => noteButton.remove(), 260);
+        }
+        if (noteBackdrop) {
+            noteBackdrop.classList.remove('open');
+            document.body.style.overflow = '';
+            setTimeout(() => noteBackdrop.remove(), 260);
+        }
+
         createBalloons();
 
         welcome.classList.add("hide");
 
         setTimeout(
             startPresentation,
-            900
+            350
         );
 
     }
@@ -5399,8 +5429,8 @@ const personalMessage = `
 وأتمنى تبقين بنفسج...
 لأن هذا الشي بالذات،
 أحبّه بيج.
-كل سنة وإنتِ بخير،
-وكل سنة وإنتِ أجمل من السنة اللي قبلها.
+كل سنة وانتي بخير،
+وكل سنة وانتي أجمل من السنة اللي قبلها.
 أحبج. 🤍
 
 `;
@@ -6351,7 +6381,7 @@ body.theme-exited .theme-toggle{
     <button id="shahoodiNoteClose" type="button" aria-label="إغلاق">×</button>
     <div style="font-size:30px;margin-bottom:10px;color:#ffd0e6">✧ ♡ ✧</div>
     <h2 id="shahoodiNoteTitle">إلى ملاكي شهودي</h2>
-    <p>كل سنة وإنتِ أجمل صدفة وأحلى شخص بحياتي.<br>يا رب تبقى ضحكتچ نور أيامي، وتتحقق كل أمنياتچ وحدة وحدة.<br><strong style="color:#ffd0e6">أحبچ اليوم وباچر وكل العمر 🤍</strong></p>
+    <p>كل سنة وانتي أجمل صدفة وأحلى شخص بحياتي.<br>يا رب تبقى ضحكتچ نور أيامي، وتتحقق كل أمنياتچ وحدة وحدة.<br><strong style="color:#ffd0e6">أحبچ اليوم وباچر وكل العمر 🤍</strong></p>
   </div>
 </div>
 <script id="shahoodi-extra-polish-js">
@@ -6365,6 +6395,56 @@ body.theme-exited .theme-toggle{
  open&&open.addEventListener('click',show);close&&close.addEventListener('click',hide);back&&back.addEventListener('click',e=>{if(e.target===back)hide()});document.addEventListener('keydown',e=>{if(e.key==='Escape')hide()});
 })();
 </script>
+
+
+<style id="shahoodi-note-actual-modal-redesign">
+/* Redesigned the actual popup opened by the bottom-left “رسالة لشهودي” button */
+#shahoodiNoteBackdrop{
+  background:radial-gradient(ellipse at 50% 0%,rgba(222,83,181,.20),transparent 52%),rgba(8,3,20,.86)!important;
+  backdrop-filter:blur(14px)!important;-webkit-backdrop-filter:blur(14px)!important;
+  padding:18px!important;
+}
+#shahoodiNoteCard{
+  box-sizing:border-box!important;
+  width:min(560px,100%)!important;
+  padding:54px clamp(22px,5vw,48px) 38px!important;
+  border:1px solid rgba(255,174,229,.72)!important;
+  border-radius:30px!important;
+  color:#fff2fc!important;
+  text-align:center!important;
+  background:
+    radial-gradient(2px 2px at 13% 19%,rgba(255,255,255,.95) 48%,transparent 70%),
+    radial-gradient(1.5px 1.5px at 82% 15%,rgba(255,205,244,.9) 48%,transparent 70%),
+    radial-gradient(2px 2px at 89% 72%,rgba(255,255,255,.8) 48%,transparent 70%),
+    radial-gradient(1.5px 1.5px at 18% 82%,rgba(255,190,238,.9) 48%,transparent 70%),
+    radial-gradient(ellipse at 50% 0%,rgba(255,92,197,.27),transparent 58%),
+    radial-gradient(ellipse at 0% 100%,rgba(196,74,255,.22),transparent 45%),
+    linear-gradient(145deg,rgba(42,13,57,.98),rgba(17,7,34,.99) 72%)!important;
+  box-shadow:0 25px 90px rgba(0,0,0,.55),0 0 35px rgba(255,91,195,.24),0 0 95px rgba(151,68,255,.17),inset 0 0 40px rgba(255,255,255,.035)!important;
+  backdrop-filter:blur(20px)!important;-webkit-backdrop-filter:blur(20px)!important;
+  overflow:hidden!important;
+}
+#shahoodiNoteCard h2{
+  margin:8px 0 22px!important;
+  font-family:'Cairo',sans-serif!important;font-weight:800!important;
+  font-size:clamp(27px,6vw,39px)!important;line-height:1.6!important;
+  color:#ffd2ee!important;
+  text-shadow:0 0 12px rgba(255,137,216,.72),0 0 34px rgba(224,75,187,.4)!important;
+}
+#shahoodiNoteCard p{
+  font-family:'Cairo',sans-serif!important;
+  font-size:clamp(16px,3.6vw,20px)!important;
+  line-height:2.15!important;font-weight:400!important;
+  color:#f6e7f4!important;text-shadow:0 0 12px rgba(255,199,237,.08)!important;
+}
+#shahoodiNoteCard p strong{color:#ffbfe4!important;text-shadow:0 0 14px rgba(255,105,195,.5)!important;font-weight:800!important}
+#shahoodiNoteClose{
+  top:14px!important;right:14px!important;width:40px!important;height:40px!important;
+  border:1px solid rgba(255,205,242,.38)!important;background:rgba(255,255,255,.07)!important;
+  color:#fff4fc!important;box-shadow:0 0 18px rgba(255,100,200,.14)!important;
+}
+@media(max-width:600px){#shahoodiNoteCard{padding:50px 22px 30px!important;border-radius:25px!important}#shahoodiNoteCard p{line-height:2!important}}
+</style>
 
 </body>
 </html>
