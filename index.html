@@ -3900,11 +3900,93 @@ body.theme-exited .theme-toggle{display:none !important}
 <canvas id="galaxyCanvas" aria-hidden="true"></canvas>
 <body>
 <style id="shahoodi-countdown-style">
-#shahoodiCountdown{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;flex-direction:column;background:radial-gradient(circle at 50% 45%,#39204e 0%,#100817 55%,#05030a 100%);color:#fff;text-align:center;transition:opacity .8s ease,visibility .8s ease;font-family:inherit}#shahoodiCountdown.done{opacity:0;visibility:hidden;pointer-events:none}#shahoodiCountdown .cd-kicker{letter-spacing:.22em;font-size:clamp(12px,2vw,17px);color:#f6cfe8;margin-bottom:22px}#shahoodiCountdown .cd-number{font-size:clamp(100px,24vw,230px);font-weight:900;line-height:1;text-shadow:0 0 25px #ff9cde,0 0 75px #c15bff;animation:cdPop .8s cubic-bezier(.2,.8,.2,1)}#shahoodiCountdown .cd-caption{margin-top:24px;font-size:clamp(18px,4vw,30px);color:#ffe7f5}@keyframes cdPop{0%{transform:scale(.2) rotate(-12deg);opacity:0}65%{transform:scale(1.15);opacity:1}100%{transform:scale(1)}}
+#shahoodiCountdown{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;flex-direction:column;isolation:isolate;overflow:hidden;background:radial-gradient(ellipse at 50% 48%,rgba(113,42,104,.42),transparent 36%),radial-gradient(ellipse at 15% 85%,rgba(100,45,150,.24),transparent 42%),linear-gradient(145deg,#08040d,#19091d 48%,#05030a);color:#fff;text-align:center;font-family:inherit;transition:opacity 1.2s ease,visibility 1.2s ease}
+#shahoodiCountdown:before,#shahoodiCountdown:after{content:"";position:absolute;z-index:-1;left:50%;top:50%;width:min(82vw,570px);aspect-ratio:1;border:1px solid rgba(255,190,230,.15);border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 65px rgba(255,100,200,.08),inset 0 0 60px rgba(255,100,200,.04);animation:cdOrbit 18s linear infinite}
+#shahoodiCountdown:after{width:min(64vw,430px);border-style:dashed;border-color:rgba(255,220,245,.10);animation-duration:28s;animation-direction:reverse}
+#shahoodiCountdown.done{opacity:0;visibility:hidden;pointer-events:none}
+#shahoodiCountdown .cd-kicker{font-size:10px;letter-spacing:.38em;color:#e8b9db;margin-bottom:25px;text-transform:uppercase;animation:cdFade 1.4s .2s both}
+#shahoodiCountdown .cd-number-wrap{position:relative;width:clamp(180px,48vw,330px);aspect-ratio:1;display:grid;place-items:center;margin:0 auto}
+#shahoodiCountdown .cd-number-wrap:before{content:"";position:absolute;inset:8%;border-radius:50%;background:radial-gradient(circle,rgba(255,132,211,.17),rgba(168,91,255,.07) 48%,transparent 70%);filter:blur(10px);animation:cdBreath 2s ease-in-out infinite}
+#shahoodiCountdown .cd-number{position:relative;font-family:'Playfair Display',serif;font-size:clamp(105px,27vw,205px);font-weight:500;line-height:1;color:#fff0fa;letter-spacing:-.06em;text-shadow:0 0 18px rgba(255,170,225,.8),0 0 65px rgba(224,89,200,.5),0 0 130px rgba(151,75,255,.28);animation:cdPop .85s cubic-bezier(.16,1,.3,1)}
+#shahoodiCountdown .cd-caption{margin-top:22px;font-size:clamp(16px,4vw,23px);font-weight:300;color:rgba(255,235,249,.82);letter-spacing:.02em;animation:cdFade 1.2s .4s both}
+#shahoodiCountdown .cd-caption span{display:block;margin-top:10px;font-size:10px;letter-spacing:.28em;color:rgba(244,190,228,.48)}
+#shahoodiCountdown .cd-bottom{position:absolute;bottom:35px;font-size:9px;letter-spacing:.35em;color:rgba(255,220,245,.3)}
+@keyframes cdPop{0%{transform:scale(.45) translateY(18px);opacity:0;filter:blur(12px)}65%{transform:scale(1.08);opacity:1;filter:blur(0)}100%{transform:scale(1)}}
+@keyframes cdOrbit{to{transform:translate(-50%,-50%) rotate(360deg)}}@keyframes cdBreath{0%,100%{transform:scale(.8);opacity:.5}50%{transform:scale(1.15);opacity:1}}@keyframes cdFade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:480px){#shahoodiCountdown .cd-kicker{font-size:9px;letter-spacing:.25em}#shahoodiCountdown .cd-caption{padding:0 22px}}
+@media(prefers-reduced-motion:reduce){#shahoodiCountdown:before,#shahoodiCountdown:after,#shahoodiCountdown .cd-number-wrap:before{animation:none}}
+/* DREAMY LUXE COUNTDOWN UPGRADE */
+#shahoodiCountdown{background:radial-gradient(ellipse at 50% 48%,rgba(255,91,190,.19),transparent 29%),radial-gradient(ellipse at 80% 18%,rgba(135,70,255,.2),transparent 35%),radial-gradient(ellipse at 15% 85%,rgba(255,70,160,.15),transparent 38%),linear-gradient(135deg,#05020b 0%,#18091f 48%,#07030f 100%)}
+#shahoodiCountdown:before{width:min(95vw,660px);border-color:rgba(255,175,224,.2);box-shadow:0 0 100px rgba(255,65,180,.12),inset 0 0 100px rgba(255,80,190,.07)}
+#shahoodiCountdown:after{width:min(76vw,520px);border:1px solid rgba(220,170,255,.15);border-left-color:rgba(255,130,210,.65);border-right-color:rgba(255,130,210,.65);filter:drop-shadow(0 0 10px rgba(255,100,210,.2))}
+#shahoodiCountdown .cd-kicker{padding:11px 22px;border:1px solid rgba(255,205,235,.2);border-radius:99px;background:rgba(255,255,255,.035);backdrop-filter:blur(12px);box-shadow:0 0 35px rgba(255,80,190,.08);font-size:9px;letter-spacing:.32em;color:#ffd4ed}
+#shahoodiCountdown .cd-number-wrap{width:clamp(210px,55vw,360px);filter:drop-shadow(0 0 35px rgba(255,85,195,.2))}
+#shahoodiCountdown .cd-number-wrap:after{content:"";position:absolute;inset:16%;border-radius:50%;border:1px solid rgba(255,222,246,.26);box-shadow:0 0 35px rgba(255,90,200,.18),inset 0 0 35px rgba(255,90,200,.1);animation:cdBreath 2.8s ease-in-out infinite}
+#shahoodiCountdown .cd-number{background:linear-gradient(180deg,#fff 8%,#ffd8f1 52%,#f18bd3 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;text-shadow:0 0 55px rgba(255,95,205,.25);filter:drop-shadow(0 0 20px rgba(255,120,215,.42))}
+#shahoodiCountdown .cd-caption{font-weight:400;text-shadow:0 2px 25px rgba(255,110,205,.25);color:#fff0fa}
+#shahoodiCountdown .cd-caption span{display:inline-block;margin-top:16px;padding:8px 15px;border-radius:99px;border:1px solid rgba(255,190,230,.16);background:rgba(255,255,255,.035);color:rgba(255,210,240,.65);font-size:9px;letter-spacing:.22em}
+#shahoodiCountdown .cd-bottom{bottom:27px;color:rgba(255,205,235,.45);font-size:8px;letter-spacing:.28em}
+@keyframes cdPop{0%{transform:scale(.35) translateY(25px);opacity:0;filter:blur(18px)}60%{transform:scale(1.12);opacity:1;filter:blur(0)}82%{transform:scale(.97)}100%{transform:scale(1)}}
+@media(max-width:480px){#shahoodiCountdown .cd-kicker{letter-spacing:.2em;padding:10px 16px}#shahoodiCountdown .cd-number-wrap{width:clamp(200px,65vw,300px)}#shahoodiCountdown .cd-caption{padding:0 18px}}
+
+
+/* HARMONIZED COUNTDOWN: matches the site's plum, charcoal and champagne-gold palette */
+#shahoodiCountdown{background:radial-gradient(ellipse at 50% 100%,rgba(234,176,127,.14),transparent 46%),radial-gradient(ellipse at 82% 22%,rgba(130,91,155,.22),transparent 42%),radial-gradient(ellipse at 12% 24%,rgba(185,130,153,.12),transparent 38%),linear-gradient(180deg,#050308 0%,#17101b 50%,#08060b 100%);color:#fff4e8}
+#shahoodiCountdown:before{border-color:rgba(234,176,127,.22);box-shadow:0 0 80px rgba(234,176,127,.07),inset 0 0 70px rgba(185,130,153,.045)}
+#shahoodiCountdown:after{border-color:rgba(217,153,107,.18);border-left-color:rgba(234,176,127,.5);border-right-color:rgba(234,176,127,.5);filter:drop-shadow(0 0 9px rgba(234,176,127,.12))}
+#cdFireworks{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.84}
+#shahoodiCountdown .cd-kicker,#shahoodiCountdown .cd-number-wrap,#shahoodiCountdown .cd-caption,#shahoodiCountdown .cd-bottom{z-index:1}
+#shahoodiCountdown .cd-kicker{color:#eab07f;border-color:rgba(234,176,127,.25);box-shadow:0 0 30px rgba(234,176,127,.06)}
+#shahoodiCountdown .cd-number-wrap{filter:drop-shadow(0 0 35px rgba(234,176,127,.18))}
+#shahoodiCountdown .cd-number-wrap:after{border-color:rgba(255,224,190,.34);box-shadow:0 0 45px rgba(234,176,127,.15),inset 0 0 35px rgba(217,153,107,.10)}
+#shahoodiCountdown .cd-number{background:linear-gradient(180deg,#fffaf2 8%,#ffd9a8 52%,#d9996b 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;text-shadow:none;filter:drop-shadow(0 0 18px rgba(234,176,127,.30))}
+#shahoodiCountdown .cd-caption{color:#fff1df;text-shadow:0 0 20px rgba(234,176,127,.20)}
+#shahoodiCountdown .cd-caption span{border-color:rgba(234,176,127,.2);color:rgba(255,217,168,.68)}
+#shahoodiCountdown .cd-bottom{color:rgba(234,176,127,.42)}
+@media(prefers-reduced-motion:reduce){#cdFireworks{display:none}}
+
 </style>
-<div id="shahoodiCountdown" aria-live="polite"><div class="cd-kicker">A LITTLE SURPRISE FOR</div><div class="cd-number" id="shahoodiCountdownNumber">3</div><div class="cd-caption">استعدّي للمفاجأة يا شهودي 🤍</div></div>
+<div id="shahoodiCountdown" aria-live="polite"><canvas id="cdFireworks" aria-hidden="true"></canvas><div class="cd-kicker">A MOMENT MADE FOR YOU</div><div class="cd-number-wrap"><div class="cd-number" id="shahoodiCountdownNumber">3</div></div><div class="cd-caption">لحظات وتبدي مفاجأتچ شهودي 🤍<span>MADE WITH LOVE · 26</span></div><div class="cd-bottom">A LITTLE UNIVERSE JUST FOR YOU</div></div>
 <script id="shahoodi-countdown-script">
-(()=>{const overlay=document.getElementById('shahoodiCountdown'),num=document.getElementById('shahoodiCountdownNumber');let steps=['3','2','1','26'];let i=0;const tick=()=>{if(!overlay)return;if(i>=steps.length){overlay.classList.add('done');setTimeout(()=>overlay.remove(),1000);return;}num.textContent=steps[i++];num.style.animation='none';void num.offsetWidth;num.style.animation='cdPop .8s cubic-bezier(.2,.8,.2,1)';setTimeout(tick,850)};document.documentElement.style.overflow='hidden';tick();setTimeout(()=>{document.documentElement.style.overflow='';if(overlay.isConnected){overlay.classList.add('done');setTimeout(()=>overlay.remove(),1000)}},5000)})();
+(()=>{
+ const overlay=document.getElementById('shahoodiCountdown'),num=document.getElementById('shahoodiCountdownNumber'),canvas=document.getElementById('cdFireworks');
+ if(!overlay||!num||!canvas)return;
+ const ctx=canvas.getContext('2d',{alpha:true,desynchronized:true});
+ if(!ctx)return;
+ let W=0,H=0,particles=[],rockets=[],raf=0,lastFrame=0,active=true;
+ const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+ const dpr=Math.min(window.devicePixelRatio||1,1.25);
+ const colors=['#eab07f','#ffd9a8','#fff1df','#b9a0df','#d9996b','#f2b7cf'];
+ const resize=()=>{W=innerWidth;H=innerHeight;canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);canvas.style.width=W+'px';canvas.style.height=H+'px';ctx.setTransform(dpr,0,0,dpr,0,0)};
+ resize();addEventListener('resize',resize,{passive:true});
+ function burst(x,y,power=.8){
+   const count=Math.round(38*power);
+   for(let j=0;j<count&&particles.length<320;j++){
+     const a=Math.PI*2*j/count+(Math.random()-.5)*.16,speed=(1+Math.random()*3.4)*power;
+     particles.push({x,y,vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,life:32+Math.random()*22,max:54,size:.8+Math.random()*1.5,color:colors[(Math.random()*colors.length)|0]});
+   }
+ }
+ function launch(){if(rockets.length<2){const x=W*(.18+Math.random()*.64),targetY=H*(.2+Math.random()*.28);rockets.push({x,y:H+5,vx:(Math.random()-.5)*.9,vy:-(6+Math.random()*2),targetY,color:colors[(Math.random()*colors.length)|0]})}}
+ function frame(now){
+   if(!active)return;
+   raf=requestAnimationFrame(frame);
+   if(now-lastFrame<32)return; // cap canvas work near 30fps
+   lastFrame=now;
+   ctx.clearRect(0,0,W,H);ctx.globalCompositeOperation='lighter';
+   rockets=rockets.filter(r=>{r.x+=r.vx;r.y+=r.vy;r.vy+=.055;ctx.globalAlpha=.85;ctx.fillStyle=r.color;ctx.beginPath();ctx.arc(r.x,r.y,1.8,0,Math.PI*2);ctx.fill();if(r.y<=r.targetY||r.vy>=-1){burst(r.x,r.y,.9);return false}return true});
+   for(let i=particles.length-1;i>=0;i--){const p=particles[i];p.x+=p.vx;p.y+=p.vy;p.vx*=.982;p.vy=p.vy*.982+.045;p.life--;if(p.life<=0){particles.splice(i,1);continue}ctx.globalAlpha=p.life/p.max;ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fill()}
+   ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
+ }
+ if(!reduced)raf=requestAnimationFrame(frame);
+ const steps=['3','2','1','26'];let i=0;
+ const stop=()=>{active=false;if(raf)cancelAnimationFrame(raf);raf=0;particles.length=0;rockets.length=0;ctx.clearRect(0,0,W,H)};
+ const tick=()=>{if(!overlay.isConnected)return;if(i>=steps.length){setTimeout(()=>{overlay.classList.add('done');document.documentElement.style.overflow='';setTimeout(()=>{stop();overlay.remove()},1200)},550);return}
+  num.textContent=steps[i++];num.style.animation='none';void num.offsetWidth;num.style.animation='cdPop .85s cubic-bezier(.16,1,.3,1)';
+  if(!reduced){burst(W*(.25+Math.random()*.5),H*(.22+Math.random()*.26),.9);launch()}
+  setTimeout(tick,1100)};
+ document.documentElement.style.overflow='hidden';tick();
+ setTimeout(()=>{if(overlay.isConnected){overlay.classList.add('done');document.documentElement.style.overflow='';setTimeout(()=>{stop();overlay.remove()},1200)}},6200);
+})();
 </script>
 
 
@@ -6241,6 +6323,46 @@ body.theme-exited .theme-toggle{
   }
 
   drawGalaxy();
+})();
+</script>
+
+
+<!-- Romantic extras: subtle petals + a little hidden love note -->
+<style id="shahoodi-extra-polish">
+#shahoodiPetalLayer{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:8;contain:strict}
+.shahoodi-petal{position:absolute;top:-36px;left:var(--x);font-size:var(--size);color:var(--petal-color);opacity:0;filter:drop-shadow(0 0 5px rgba(255,190,220,.24));animation:shahoodiPetalFall var(--duration) linear forwards;will-change:transform,opacity}
+@keyframes shahoodiPetalFall{0%{transform:translate3d(0,-5vh,0) rotate(0deg);opacity:0}10%{opacity:.72}85%{opacity:.5}100%{transform:translate3d(var(--drift),110vh,0) rotate(520deg);opacity:0}}
+#shahoodiNoteButton{position:fixed;left:18px;bottom:22px;z-index:40;border:1px solid rgba(255,211,232,.45);border-radius:999px;padding:12px 17px;background:linear-gradient(135deg,rgba(63,29,67,.88),rgba(117,50,91,.88));color:#fff2fa;font:600 14px/1.2 inherit;letter-spacing:.2px;box-shadow:0 0 22px rgba(226,117,181,.18),inset 0 1px rgba(255,255,255,.14);backdrop-filter:blur(12px);cursor:pointer;transition:transform .25s,box-shadow .25s}
+#shahoodiNoteButton:hover{transform:translateY(-3px);box-shadow:0 0 30px rgba(226,117,181,.35)}
+#shahoodiNoteBackdrop{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(12,5,22,.72);backdrop-filter:blur(9px)}
+#shahoodiNoteBackdrop.open{display:flex;animation:shahoodiNoteFade .3s ease both}
+#shahoodiNoteCard{position:relative;width:min(440px,100%);padding:34px 27px 30px;border:1px solid rgba(255,210,232,.48);border-radius:26px;text-align:center;color:#fff4fb;background:radial-gradient(ellipse at top,rgba(173,93,151,.35),transparent 65%),linear-gradient(145deg,#24142f,#160e25 75%);box-shadow:0 25px 90px rgba(0,0,0,.45),0 0 38px rgba(224,126,187,.17);animation:shahoodiCardPop .45s cubic-bezier(.2,.8,.2,1) both}
+#shahoodiNoteCard h2{margin:0 0 14px;color:#ffd5e9;font-size:clamp(23px,5vw,30px);text-shadow:0 0 18px rgba(255,155,210,.3)}
+#shahoodiNoteCard p{margin:0;color:#f7e9f2;font-size:17px;line-height:2}
+#shahoodiNoteClose{position:absolute;top:10px;right:13px;width:34px;height:34px;border:1px solid rgba(255,255,255,.18);border-radius:50%;background:rgba(255,255,255,.07);color:white;font-size:22px;cursor:pointer}
+@keyframes shahoodiNoteFade{from{opacity:0}to{opacity:1}}@keyframes shahoodiCardPop{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(max-width:600px){#shahoodiNoteButton{left:12px;bottom:12px;padding:10px 14px;font-size:12px}#shahoodiNoteCard{padding:32px 20px 25px}}
+@media(prefers-reduced-motion:reduce){.shahoodi-petal{display:none!important}#shahoodiNoteBackdrop.open,#shahoodiNoteCard{animation:none!important}}
+</style>
+<div id="shahoodiPetalLayer" aria-hidden="true"></div>
+<button id="shahoodiNoteButton" type="button" aria-haspopup="dialog">♡ رسالة لشهودي</button>
+<div id="shahoodiNoteBackdrop" role="dialog" aria-modal="true" aria-labelledby="shahoodiNoteTitle">
+  <div id="shahoodiNoteCard">
+    <button id="shahoodiNoteClose" type="button" aria-label="إغلاق">×</button>
+    <div style="font-size:30px;margin-bottom:10px;color:#ffd0e6">✧ ♡ ✧</div>
+    <h2 id="shahoodiNoteTitle">إلى ملاكي شهودي</h2>
+    <p>كل سنة وإنتِ أجمل صدفة وأحلى شخص بحياتي.<br>يا رب تبقى ضحكتچ نور أيامي، وتتحقق كل أمنياتچ وحدة وحدة.<br><strong style="color:#ffd0e6">أحبچ اليوم وباچر وكل العمر 🤍</strong></p>
+  </div>
+</div>
+<script id="shahoodi-extra-polish-js">
+(()=>{
+ const layer=document.getElementById('shahoodiPetalLayer');
+ const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ if(layer&&!reduce){let live=0;const makePetal=()=>{if(document.hidden||live>=7)return;const el=document.createElement('span');el.className='shahoodi-petal';el.textContent=Math.random()>.45?'✿':'♥';el.style.setProperty('--x',Math.random()*100+'vw');el.style.setProperty('--size',(10+Math.random()*11)+'px');el.style.setProperty('--duration',(9+Math.random()*7)+'s');el.style.setProperty('--drift',(-90+Math.random()*180)+'px');el.style.setProperty('--petal-color',Math.random()>.5?'#f6b5d3':'#d9b8f0');layer.appendChild(el);live++;el.addEventListener('animationend',()=>{el.remove();live=Math.max(0,live-1)},{once:true})};setTimeout(makePetal,900);setInterval(makePetal,1900)}
+ const back=document.getElementById('shahoodiNoteBackdrop'),open=document.getElementById('shahoodiNoteButton'),close=document.getElementById('shahoodiNoteClose');
+ const show=()=>{if(back){back.classList.add('open');document.body.style.overflow='hidden';close&&close.focus()}};
+ const hide=()=>{if(back){back.classList.remove('open');document.body.style.overflow=''}};
+ open&&open.addEventListener('click',show);close&&close.addEventListener('click',hide);back&&back.addEventListener('click',e=>{if(e.target===back)hide()});document.addEventListener('keydown',e=>{if(e.key==='Escape')hide()});
 })();
 </script>
 
