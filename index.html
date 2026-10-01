@@ -6083,14 +6083,18 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
     }
 
     function setTheme(space){
-        document.body.classList.toggle('space-mode', space);
+        const changed = document.body.classList.toggle('space-mode', space);
         toggle.querySelector('.theme-icon').textContent = space ? '✨' : '🌌';
         if(window.switchThemeMusic) window.switchThemeMusic(space);
         toggle.querySelector('.theme-toggle-text').textContent = space ? 'الأصلي' : 'الفضاء';
         toggle.setAttribute('aria-label', space ? 'العودة للثيم الأصلي' : 'تفعيل ثيم الفضاء');
         try{ localStorage.setItem(KEY, space ? 'space' : 'original'); }catch(_){}
-        if(space) startMeteors();
-        else{
+        if(space){
+            startMeteors();
+            const gc=document.getElementById('galaxyCanvas');
+            if(gc && window.startGalaxyAnimation) window.startGalaxyAnimation();
+        } else{
+            if(window.stopGalaxyAnimation) window.stopGalaxyAnimation();
             clearInterval(meteorTimer);
             meteors.innerHTML = '';
         }
@@ -6108,17 +6112,7 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
 (()=>{
   let starHits=0, starTimer=null;
 
-  /* Gentle touch spark: one DOM node at a time, auto removed */
-  let sparkBusy=false;
-  document.addEventListener('pointerdown',e=>{
-    if(sparkBusy || e.target.closest('button,input,a')) return;
-    sparkBusy=true;
-    const s=document.createElement('span');
-    s.style.cssText=`position:fixed;left:${e.clientX}px;top:${e.clientY}px;width:7px;height:7px;border-radius:50%;background:#fff;box-shadow:0 0 18px 6px rgba(255,190,220,.55);pointer-events:none;z-index:220;transform:translate(-50%,-50%);opacity:.75;transition:transform .5s ease,opacity .5s ease`;
-    document.body.appendChild(s);
-    requestAnimationFrame(()=>{s.style.transform='translate(-50%,-50%) scale(3)';s.style.opacity='0'});
-    setTimeout(()=>{s.remove();sparkBusy=false},520);
-  },{passive:true});
+  /* Touch spark disabled for smoother interaction. */
 
   /* Add a little breathing room before the final scene appears after the gift. */
   const finalScreen=document.getElementById('finalScreen');
@@ -6346,7 +6340,7 @@ body.theme-exited .theme-toggle{
     canvas.height=Math.floor(h*dpr);
     canvas.style.width=w+'px'; canvas.style.height=h+'px';
     ctx.setTransform(dpr,0,0,dpr,0,0);
-    const count=Math.min(150, Math.max(70, Math.floor(w*h/9000)));
+    const count=Math.min(70, Math.max(35, Math.floor(w*h/18000)));
     stars=Array.from({length:count},()=>({
       x:Math.random()*w,y:Math.random()*h,
       r:Math.random()*1.35+.25,
@@ -6369,6 +6363,7 @@ body.theme-exited .theme-toggle{
   }
 
   function drawGalaxy(){
+    if(!body.classList.contains('space-mode')){ raf=0; return; }
     ctx.clearRect(0,0,w,h);
 
     // Deep-space base.
@@ -6435,29 +6430,19 @@ body.theme-exited .theme-toggle{
     raf=requestAnimationFrame(drawGalaxy);
   }
 
-  drawGalaxy();
+  window.startGalaxyAnimation=()=>{ if(!raf && body.classList.contains('space-mode')) raf=requestAnimationFrame(drawGalaxy); };
+  window.stopGalaxyAnimation=()=>{ if(raf){cancelAnimationFrame(raf);raf=0;} ctx.clearRect(0,0,w,h); };
+  if(body.classList.contains('space-mode')) window.startGalaxyAnimation();
 })();
 </script>
 
 
 <!-- Romantic extras: subtle petals + a little hidden love note -->
 <style id="shahoodi-extra-polish">
-#shahoodiPetalLayer{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:8;contain:strict}
-.shahoodi-petal{position:absolute;top:-36px;left:var(--x);font-size:var(--size);color:var(--petal-color);opacity:0;filter:drop-shadow(0 0 5px rgba(255,190,220,.24));animation:shahoodiPetalFall var(--duration) linear forwards;will-change:transform,opacity}
-@keyframes shahoodiPetalFall{0%{transform:translate3d(0,-5vh,0) rotate(0deg);opacity:0}10%{opacity:.72}85%{opacity:.5}100%{transform:translate3d(var(--drift),110vh,0) rotate(520deg);opacity:0}}
-#shahoodiNoteButton{position:fixed;left:18px;bottom:22px;z-index:40;border:1px solid rgba(255,211,232,.45);border-radius:999px;padding:12px 17px;background:linear-gradient(135deg,rgba(63,29,67,.88),rgba(117,50,91,.88));color:#fff2fa;font:600 14px/1.2 inherit;letter-spacing:.2px;box-shadow:0 0 22px rgba(226,117,181,.18),inset 0 1px rgba(255,255,255,.14);backdrop-filter:blur(12px);cursor:pointer;transition:transform .25s,box-shadow .25s}
-#shahoodiNoteButton:hover{transform:translateY(-3px);box-shadow:0 0 30px rgba(226,117,181,.35)}
-#shahoodiNoteBackdrop{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:22px;background:rgba(12,5,22,.72);backdrop-filter:blur(9px)}
-#shahoodiNoteBackdrop.open{display:flex;animation:shahoodiNoteFade .3s ease both}
-#shahoodiNoteCard{position:relative;width:min(440px,100%);padding:34px 27px 30px;border:1px solid rgba(255,210,232,.48);border-radius:26px;text-align:center;color:#fff4fb;background:radial-gradient(ellipse at top,rgba(173,93,151,.35),transparent 65%),linear-gradient(145deg,#24142f,#160e25 75%);box-shadow:0 25px 90px rgba(0,0,0,.45),0 0 38px rgba(224,126,187,.17);animation:shahoodiCardPop .45s cubic-bezier(.2,.8,.2,1) both}
-#shahoodiNoteCard h2{margin:0 0 14px;color:#ffd5e9;font-size:clamp(23px,5vw,30px);text-shadow:0 0 18px rgba(255,155,210,.3)}
-#shahoodiNoteCard p{margin:0;color:#f7e9f2;font-size:17px;line-height:2}
-#shahoodiNoteClose{position:absolute;top:10px;right:13px;width:34px;height:34px;border:1px solid rgba(255,255,255,.18);border-radius:50%;background:rgba(255,255,255,.07);color:white;font-size:22px;cursor:pointer}
-@keyframes shahoodiNoteFade{from{opacity:0}to{opacity:1}}@keyframes shahoodiCardPop{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
-@media(max-width:600px){#shahoodiNoteButton{left:12px;bottom:12px;padding:10px 14px;font-size:12px}#shahoodiNoteCard{padding:32px 20px 25px}}
-@media(prefers-reduced-motion:reduce){.shahoodi-petal{display:none!important}#shahoodiNoteBackdrop.open,#shahoodiNoteCard{animation:none!important}}
+/* Performance: falling petals disabled to keep the site smooth. */
+#shahoodiPetalLayer{display:none!important}
+#shahoodiNoteButton{position:fixed;left:18px;bottom:22px;z-index:40}
 </style>
-<div id="shahoodiPetalLayer" aria-hidden="true"></div>
 <button id="shahoodiNoteButton" type="button" aria-haspopup="dialog">♡ رسالة لشهودي</button>
 <div id="shahoodiNoteBackdrop" role="dialog" aria-modal="true" aria-labelledby="shahoodiNoteTitle">
   <div id="shahoodiNoteCard">
@@ -6469,9 +6454,6 @@ body.theme-exited .theme-toggle{
 </div>
 <script id="shahoodi-extra-polish-js">
 (()=>{
- const layer=document.getElementById('shahoodiPetalLayer');
- const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
- if(layer&&!reduce){let live=0;const makePetal=()=>{if(document.hidden||live>=7)return;const el=document.createElement('span');el.className='shahoodi-petal';el.textContent=Math.random()>.45?'✿':'♥';el.style.setProperty('--x',Math.random()*100+'vw');el.style.setProperty('--size',(10+Math.random()*11)+'px');el.style.setProperty('--duration',(9+Math.random()*7)+'s');el.style.setProperty('--drift',(-90+Math.random()*180)+'px');el.style.setProperty('--petal-color',Math.random()>.5?'#f6b5d3':'#d9b8f0');layer.appendChild(el);live++;el.addEventListener('animationend',()=>{el.remove();live=Math.max(0,live-1)},{once:true})};setTimeout(makePetal,900);setInterval(makePetal,1900)}
  const back=document.getElementById('shahoodiNoteBackdrop'),open=document.getElementById('shahoodiNoteButton'),close=document.getElementById('shahoodiNoteClose');
  const show=()=>{if(back){back.classList.add('open');document.body.style.overflow='hidden';close&&close.focus()}};
  const hide=()=>{if(back){back.classList.remove('open');document.body.style.overflow=''}};
@@ -6484,7 +6466,7 @@ body.theme-exited .theme-toggle{
 /* Redesigned the actual popup opened by the bottom-left “رسالة لشهودي” button */
 #shahoodiNoteBackdrop{
   background:radial-gradient(ellipse at 50% 0%,rgba(222,83,181,.20),transparent 52%),rgba(8,3,20,.86)!important;
-  backdrop-filter:blur(14px)!important;-webkit-backdrop-filter:blur(14px)!important;
+  backdrop-filter:blur(6px)!important;-webkit-backdrop-filter:blur(6px)!important;
   padding:18px!important;
 }
 #shahoodiNoteCard{
