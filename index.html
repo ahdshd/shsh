@@ -2437,6 +2437,7 @@ button{
     position:absolute;
     inset:0;
     z-index:35;
+    background:var(--bg);
 
     display:flex;
     align-items:center;
@@ -5398,6 +5399,10 @@ function blowCandle(){
 
 function finishCandles(){
 
+    // أوقف مرحلة الكيكة أولاً حتى لا تبقى ظاهرة تحت الصفحة التالية
+    cakeScreen.classList.remove("show");
+    cakeScreen.style.pointerEvents = "none";
+
     microphoneRunning = false;
 
     if(microphoneStream){
@@ -5428,10 +5433,9 @@ function finishCandles(){
     micStatus.textContent =
         "أمنيتج وصلت 🤍";
 
-    // بعد إطفاء آخر شمعة ننتقل مباشرة للمرحلة التالية
-    requestAnimationFrame(() => {
-        showCelebration();
-    });
+    // بعد إطفاء آخر شمعة ننتقل مباشرة إلى «اليوم يومج ياجميل»
+    // بدون مؤقت إضافي
+    showCelebration();
 
 }
 
