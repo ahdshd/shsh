@@ -2337,7 +2337,8 @@ button{
       radial-gradient(1px 1px at 53% 12%, #fff 50%, transparent 70%);
     background-size:230px 210px,280px 260px,310px 290px,250px 240px,190px 220px;
 }
-.message-screen.show{opacity:1;visibility:visible;}
+.message-screen.show{opacity:1;visibility:visible;pointer-events:auto;}
+.message-screen:not(.show){opacity:0!important;visibility:hidden!important;pointer-events:none!important;}
 .message-content{
     position:relative;
     width:min(100%, 760px);
@@ -4423,7 +4424,8 @@ body.theme-exited .theme-toggle{display:none !important}
 
     <section
         class="message-screen"
-        id="messageScreen">
+        id="messageScreen"
+        style="opacity:0;visibility:hidden;pointer-events:none;">
 
         <div class="message-content">
 
@@ -6334,13 +6336,13 @@ body.theme-exited .theme-toggle{
   const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function resize(){
-    dpr=Math.min(window.devicePixelRatio||1,1.5);
+    dpr=Math.min(window.devicePixelRatio||1,1.15);
     w=innerWidth; h=innerHeight;
     canvas.width=Math.floor(w*dpr);
     canvas.height=Math.floor(h*dpr);
     canvas.style.width=w+'px'; canvas.style.height=h+'px';
     ctx.setTransform(dpr,0,0,dpr,0,0);
-    const count=Math.min(70, Math.max(35, Math.floor(w*h/18000)));
+    const count=Math.min(42, Math.max(24, Math.floor(w*h/26000)));
     stars=Array.from({length:count},()=>({
       x:Math.random()*w,y:Math.random()*h,
       r:Math.random()*1.35+.25,
@@ -6364,6 +6366,9 @@ body.theme-exited .theme-toggle{
 
   function drawGalaxy(){
     if(!body.classList.contains('space-mode')){ raf=0; return; }
+    const now=performance.now();
+    if(now-last < 33){ raf=requestAnimationFrame(drawGalaxy); return; }
+    last=now;
     ctx.clearRect(0,0,w,h);
 
     // Deep-space base.
@@ -6444,7 +6449,7 @@ body.theme-exited .theme-toggle{
 #shahoodiNoteButton{position:fixed;left:18px;bottom:22px;z-index:40}
 </style>
 <button id="shahoodiNoteButton" type="button" aria-haspopup="dialog">♡ رسالة لشهودي</button>
-<div id="shahoodiNoteBackdrop" role="dialog" aria-modal="true" aria-labelledby="shahoodiNoteTitle">
+<div id="shahoodiNoteBackdrop" role="dialog" aria-modal="true" aria-labelledby="shahoodiNoteTitle" style="opacity:0;visibility:hidden;pointer-events:none;">
   <div id="shahoodiNoteCard">
     <button id="shahoodiNoteClose" type="button" aria-label="إغلاق">×</button>
     <div style="font-size:30px;margin-bottom:10px;color:#ffd0e6">✧ ♡ ✧</div>
@@ -6455,13 +6460,39 @@ body.theme-exited .theme-toggle{
 <script id="shahoodi-extra-polish-js">
 (()=>{
  const back=document.getElementById('shahoodiNoteBackdrop'),open=document.getElementById('shahoodiNoteButton'),close=document.getElementById('shahoodiNoteClose');
- const show=()=>{if(back){back.classList.add('open');document.body.style.overflow='hidden';close&&close.focus()}};
- const hide=()=>{if(back){back.classList.remove('open');document.body.style.overflow=''}};
+ const show=()=>{if(back){back.style.opacity='1';back.style.visibility='visible';back.style.pointerEvents='auto';back.classList.add('open');document.body.style.overflow='hidden';close&&close.focus()}};
+ const hide=()=>{if(back){back.classList.remove('open');back.style.opacity='0';back.style.visibility='hidden';back.style.pointerEvents='none';document.body.style.overflow=''}};
+ hide();
  open&&open.addEventListener('click',show);close&&close.addEventListener('click',hide);back&&back.addEventListener('click',e=>{if(e.target===back)hide()});document.addEventListener('keydown',e=>{if(e.key==='Escape')hide()});
 })();
 </script>
 
 
+<style id="shahoodi-note-performance-fix">
+#shahoodiNoteBackdrop{
+  position:fixed!important;inset:0!important;z-index:999999!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  visibility:hidden!important;opacity:0!important;pointer-events:none!important;
+  transition:opacity .22s ease,visibility .22s ease!important;
+  box-sizing:border-box!important;
+  background:rgba(8,3,20,.82)!important;
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+}
+#shahoodiNoteBackdrop.open{visibility:visible!important;opacity:1!important;pointer-events:auto!important}
+#shahoodiNoteCard{position:relative!important;transform:translateY(10px) scale(.98);transition:transform .22s ease!important}
+#shahoodiNoteBackdrop.open #shahoodiNoteCard{transform:translateY(0) scale(1)}
+#shahoodiNoteClose{
+  position:absolute!important;z-index:5!important;
+  top:14px!important;right:14px!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;
+  margin:0!important;padding:0!important;border-radius:50%!important;
+  cursor:pointer!important;font:400 28px/1 Arial,sans-serif!important;
+  opacity:1!important;visibility:visible!important;
+}
+body.theme-switching *{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+body.theme-switching .theme-toggle{animation:none!important}
+</style>
 <style id="shahoodi-note-actual-modal-redesign">
 /* Redesigned the actual popup opened by the bottom-left “رسالة لشهودي” button */
 #shahoodiNoteBackdrop{
@@ -6485,8 +6516,8 @@ body.theme-exited .theme-toggle{
     radial-gradient(ellipse at 50% 0%,rgba(255,92,197,.27),transparent 58%),
     radial-gradient(ellipse at 0% 100%,rgba(196,74,255,.22),transparent 45%),
     linear-gradient(145deg,rgba(42,13,57,.98),rgba(17,7,34,.99) 72%)!important;
-  box-shadow:0 25px 90px rgba(0,0,0,.55),0 0 35px rgba(255,91,195,.24),0 0 95px rgba(151,68,255,.17),inset 0 0 40px rgba(255,255,255,.035)!important;
-  backdrop-filter:blur(20px)!important;-webkit-backdrop-filter:blur(20px)!important;
+  box-shadow:0 18px 55px rgba(0,0,0,.5),0 0 28px rgba(255,91,195,.16)!important;
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
   overflow:hidden!important;
 }
 #shahoodiNoteCard h2{
