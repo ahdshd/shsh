@@ -2092,14 +2092,15 @@ button{
         );
 
     box-shadow:
-        0 0 12px rgba(255,200,120,.9),
-        0 0 28px rgba(255,120,50,.7);
+        0 0 7px rgba(255,200,120,.65),
+        0 0 14px rgba(255,120,50,.35);
 
     animation:
         flameFlicker
-        .13s
+        .22s
         infinite
         alternate;
+    will-change:transform,opacity;
 }
 
 @keyframes flameFlicker{
@@ -2131,9 +2132,10 @@ button{
 
     background:rgba(255,255,255,.18);
 
-    filter:blur(4px);
+    filter:none;
 
     opacity:0;
+    will-change:transform,opacity;
 }
 
 .candle.extinguishing .flame{
@@ -5261,7 +5263,7 @@ async function startMicrophone(){
             .createAnalyser();
 
         analyser.fftSize =
-            1024;
+            256;
 
         analyser.smoothingTimeConstant =
             .08;
@@ -5322,65 +5324,38 @@ function manualMode(){
 
 }
 
-function listenToBlow(){
+let micLastSample = 0;
+function listenToBlow(now=performance.now()){
 
-    if(!microphoneRunning)
+    if(!microphoneRunning || !analyser)
         return;
 
-    const data =
-        new Uint8Array(
-            analyser.fftSize
-        );
+    // تحليل الصوت حوالي 20 مرة بالثانية بدل كل frame لتقليل حمل المعالج.
+    if(now - micLastSample < 50){
+        requestAnimationFrame(listenToBlow);
+        return;
+    }
+    micLastSample = now;
 
+    const data = new Uint8Array(analyser.fftSize);
     analyser.getByteTimeDomainData(data);
 
     let sum = 0;
-
-    for(
-        let i = 0;
-        i < data.length;
-        i++
-    ){
-
-        const normalized =
-            (data[i]-128)/128;
-
-        sum +=
-            normalized *
-            normalized;
-
+    for(let i=0; i<data.length; i++){
+        const normalized = (data[i]-128)/128;
+        sum += normalized * normalized;
     }
 
-    const rms =
-        Math.sqrt(
-            sum / data.length
-        );
+    const rms = Math.sqrt(sum / data.length);
+    const power = Math.min(100, rms * 1600);
+    meterFill.style.width = power + "%";
 
-    const power =
-        Math.min(
-            100,
-            rms * 1600
-        );
-
-    meterFill.style.width =
-        power + "%";
-
-    if(
-        rms > .045 &&
-        performance.now() -
-        lastBlow > 400
-    ){
-
-        lastBlow =
-            performance.now();
-
+    if(rms > .055 && now - lastBlow > 450){
+        lastBlow = now;
         blowCandle();
-
     }
 
-    requestAnimationFrame(
-        listenToBlow
-    );
+    requestAnimationFrame(listenToBlow);
 
 }
 
@@ -5489,10 +5464,10 @@ function finishCandles(){
     micStatus.textContent =
         "أمنيتج وصلت 🤍";
 
-    setTimeout(
-        showMessage,
-        1200
-    );
+    // الانتقال مباشرة بعد إطفاء آخر شمعة بدون انتظار إضافي
+    requestAnimationFrame(() => {
+        showMessage();
+    });
 
 }
 
@@ -6542,6 +6517,24 @@ body.theme-switching .theme-toggle{animation:none!important}
 @media(max-width:600px){#shahoodiNoteCard{padding:50px 22px 30px!important;border-radius:25px!important}#shahoodiNoteCard p{line-height:2!important}}
 </style>
 
+
+<style id="performance-candle-music-fix">
+/* أداء أخف: نخلي المؤثرات تعتمد على transform/opacity قدر الإمكان */
+.candle, .flame, .smoke, .music-control, .music-control::before, .music-control::after {
+  will-change: transform, opacity;
+}
+.candle.off .smoke {
+  filter: none !important;
+  box-shadow: none !important;
+}
+.music-control.playing::before,
+.music-control.playing::after {
+  filter: none !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .flame, .music-control::before, .music-control::after { animation: none !important; }
+}
+</style>
 </body>
 </html>
 
