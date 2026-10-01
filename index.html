@@ -4428,32 +4428,6 @@ body.countdown-active .experience{will-change:auto !important;}
     </section>
 
     <!-- =========================
-         MESSAGE
-    ========================= -->
-
-    <section
-        class="message-screen"
-        id="messageScreen"
-        style="opacity:0;visibility:hidden;pointer-events:none;">
-
-        <div class="message-content">
-
-            <div class="message-small" aria-hidden="true">✧ ♡ ✧</div>
-
-            <div class="message-name">
-                رسالة لشهودي
-            </div>
-
-            <div
-                class="message-text"
-                id="messageText">
-            </div>
-
-        </div>
-
-    </section>
-
-    <!-- =========================
          CELEBRATION
     ========================= -->
 
@@ -4656,8 +4630,6 @@ const wishScreen =
 const cakeScreen =
     document.getElementById("cakeScreen");
 
-const messageScreen =
-    document.getElementById("messageScreen");
 
 const celebration =
     document.getElementById("celebration");
@@ -4979,21 +4951,6 @@ document
 .addEventListener(
     "click",
     function(){
-
-        // إخفاء زر الرسالة والنافذة فقط عند الضغط على «جاهزه»
-        const noteButton = document.getElementById('shahoodiNoteButton');
-        const noteBackdrop = document.getElementById('shahoodiNoteBackdrop');
-        if (noteButton) {
-            noteButton.style.transition = 'opacity .25s ease, transform .25s ease';
-            noteButton.style.opacity = '0';
-            noteButton.style.transform = 'translateY(10px)';
-            setTimeout(() => noteButton.remove(), 260);
-        }
-        if (noteBackdrop) {
-            noteBackdrop.classList.remove('open');
-            document.body.style.overflow = '';
-            setTimeout(() => noteBackdrop.remove(), 260);
-        }
 
         createBalloons();
 
@@ -5471,131 +5428,12 @@ function finishCandles(){
     micStatus.textContent =
         "أمنيتج وصلت 🤍";
 
-    // الانتقال مباشرة بعد إطفاء آخر شمعة بدون انتظار إضافي
+    // بعد إطفاء آخر شمعة ننتقل مباشرة للمرحلة التالية
     requestAnimationFrame(() => {
-        showMessage();
+        showCelebration();
     });
 
 }
-
-
-/* =====================================================
-   MESSAGE
-===================================================== */
-
-const personalMessage = `
-
-شهودي... 🤍
-اليوم مو مجرد تاريخ يمر بالسنة.
-اليوم بداية سنة جديدة من عمرج،
-وأتمنى تكون أخف،
-وأجمل،
-ومليانة لحظات تستحق الابتسامة.
-أتمنى كل أمنية خبّيتيها بقلبج
-تلقى طريقها إلج بهالسنة.
-وأتمنى تبقين بنفسج...
-لأن هذا الشي بالذات،
-أحبّه بيج.
-كل سنة وإنتِ بخير،
-وكل سنة وإنتِ أجمل من السنة اللي قبلها.
-أحبج. 🤍
-
-`;
-
-let typingTimeout = null;
-let isTyping = false;
-
-function showMessage(){
-
-    cakeScreen.classList.remove("show");
-
-    messageScreen.classList.add("show");
-
-    typeMessage();
-
-}
-
-function typeMessage(){
-
-    const target = document.getElementById("messageText");
-
-    clearTimeout(typingTimeout);
-    target.innerHTML = "";
-    isTyping = true;
-
-    const cursor = document.createElement("span");
-    cursor.className = "typing-cursor";
-
-    // عرض الرسالة حرفاً حرفاً بشكل ناعم، مع الحفاظ على الأسطر.
-    const text = personalMessage.trim();
-    let i = 0;
-
-    function type(){
-        if(i >= text.length){
-            isTyping = false;
-            target.appendChild(cursor);
-            return;
-        }
-
-        const char = text[i++];
-
-        if(char === "\\n"){
-            target.appendChild(document.createElement("br"));
-        }else{
-            target.appendChild(document.createTextNode(char));
-        }
-
-        // وقفة صغيرة عند نهاية الجمل حتى يكون الظهور أجمل.
-        let delay = 28;
-        if(/[،,]/.test(char)) delay = 90;
-        if(/[.!؟]/.test(char)) delay = 180;
-
-        typingTimeout = setTimeout(type, delay);
-    }
-
-    type();
-
-}
-
-messageScreen.addEventListener(
-    "click",
-    function(){
-
-        if(!isTyping)
-            return;
-
-        clearTimeout(typingTimeout);
-
-        isTyping = false;
-
-        const target =
-            document.getElementById(
-                "messageText"
-            );
-
-        target.innerHTML =
-            personalMessage
-            .trim()
-            .replace(
-                /\n/g,
-                "<br>"
-            );
-
-        const cursor =
-            document.createElement("span");
-
-        cursor.className =
-            "typing-cursor";
-
-        target.appendChild(cursor);
-
-        setTimeout(
-            showCelebration,
-            250
-        );
-
-    }
-);
 
 
 /* =====================================================
@@ -5603,8 +5441,6 @@ messageScreen.addEventListener(
 ===================================================== */
 
 function showCelebration(){
-
-    messageScreen.classList.remove("show");
 
     celebration.classList.add("show");
 
@@ -5789,7 +5625,6 @@ document
         finalScreen.classList.remove("show");
         giftScreen.classList.remove("show");
         celebration.classList.remove("show");
-        messageScreen.classList.remove("show");
         cakeScreen.classList.remove("show");
         wishScreen.classList.remove("show");
         presentation.classList.remove("show");
@@ -6390,130 +6225,4 @@ body.theme-exited .theme-toggle{
   window.stopGalaxyAnimation=()=>{ if(raf){cancelAnimationFrame(raf);raf=0;} ctx.clearRect(0,0,w,h); };
   if(body.classList.contains('space-mode')) window.startGalaxyAnimation();
 })();
-</script>
-
-
-<!-- Romantic extras: subtle petals + a little hidden love note -->
-<style id="shahoodi-extra-polish">
-/* Performance: falling petals disabled to keep the site smooth. */
-#shahoodiPetalLayer{display:none!important}
-#shahoodiNoteButton{position:fixed;left:18px;bottom:22px;z-index:40}
-</style>
-<button id="shahoodiNoteButton" type="button" aria-haspopup="dialog">♡ رسالة لشهودي</button>
-<div id="shahoodiNoteBackdrop" role="dialog" aria-modal="true" aria-labelledby="shahoodiNoteTitle" style="opacity:0;visibility:hidden;pointer-events:none;">
-  <div id="shahoodiNoteCard">
-    <button id="shahoodiNoteClose" type="button" aria-label="إغلاق">×</button>
-    <div style="font-size:30px;margin-bottom:10px;color:#ffd0e6">✧ ♡ ✧</div>
-    <h2 id="shahoodiNoteTitle">إلى ملاكي شهودي</h2>
-    <p>كل سنة وإنتِ أجمل صدفة وأحلى شخص بحياتي.<br>يا رب تبقى ضحكتچ نور أيامي، وتتحقق كل أمنياتچ وحدة وحدة.<br><strong style="color:#ffd0e6">أحبچ اليوم وباچر وكل العمر 🤍</strong></p>
-  </div>
-</div>
-<script id="shahoodi-extra-polish-js">
-(()=>{
- const back=document.getElementById('shahoodiNoteBackdrop'),open=document.getElementById('shahoodiNoteButton'),close=document.getElementById('shahoodiNoteClose');
- const show=()=>{if(back){back.style.opacity='1';back.style.visibility='visible';back.style.pointerEvents='auto';back.classList.add('open');document.body.style.overflow='hidden';close&&close.focus()}};
- const hide=()=>{if(back){back.classList.remove('open');back.style.opacity='0';back.style.visibility='hidden';back.style.pointerEvents='none';document.body.style.overflow=''}};
- hide();
- open&&open.addEventListener('click',show);close&&close.addEventListener('click',hide);back&&back.addEventListener('click',e=>{if(e.target===back)hide()});document.addEventListener('keydown',e=>{if(e.key==='Escape')hide()});
-})();
-</script>
-
-
-<style id="shahoodi-note-performance-fix">
-#shahoodiNoteBackdrop{
-  position:fixed!important;inset:0!important;z-index:999999!important;
-  display:flex!important;align-items:center!important;justify-content:center!important;
-  visibility:hidden!important;opacity:0!important;pointer-events:none!important;
-  transition:opacity .22s ease,visibility .22s ease!important;
-  box-sizing:border-box!important;
-  background:rgba(8,3,20,.82)!important;
-  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
-}
-#shahoodiNoteBackdrop.open{visibility:visible!important;opacity:1!important;pointer-events:auto!important}
-#shahoodiNoteCard{position:relative!important;transform:translateY(10px) scale(.98);transition:transform .22s ease!important}
-#shahoodiNoteBackdrop.open #shahoodiNoteCard{transform:translateY(0) scale(1)}
-#shahoodiNoteClose{
-  position:absolute!important;z-index:5!important;
-  top:14px!important;right:14px!important;
-  display:flex!important;align-items:center!important;justify-content:center!important;
-  width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;
-  margin:0!important;padding:0!important;border-radius:50%!important;
-  cursor:pointer!important;font:400 28px/1 Arial,sans-serif!important;
-  opacity:1!important;visibility:visible!important;
-}
-body.theme-switching *{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
-body.theme-switching .theme-toggle{animation:none!important}
-</style>
-<style id="shahoodi-note-actual-modal-redesign">
-/* Redesigned the actual popup opened by the bottom-left “رسالة لشهودي” button */
-#shahoodiNoteBackdrop{
-  background:radial-gradient(ellipse at 50% 0%,rgba(222,83,181,.20),transparent 52%),rgba(8,3,20,.86)!important;
-  backdrop-filter:blur(6px)!important;-webkit-backdrop-filter:blur(6px)!important;
-  padding:18px!important;
-}
-#shahoodiNoteCard{
-  box-sizing:border-box!important;
-  width:min(560px,100%)!important;
-  padding:54px clamp(22px,5vw,48px) 38px!important;
-  border:1px solid rgba(255,174,229,.72)!important;
-  border-radius:30px!important;
-  color:#fff2fc!important;
-  text-align:center!important;
-  background:
-    radial-gradient(2px 2px at 13% 19%,rgba(255,255,255,.95) 48%,transparent 70%),
-    radial-gradient(1.5px 1.5px at 82% 15%,rgba(255,205,244,.9) 48%,transparent 70%),
-    radial-gradient(2px 2px at 89% 72%,rgba(255,255,255,.8) 48%,transparent 70%),
-    radial-gradient(1.5px 1.5px at 18% 82%,rgba(255,190,238,.9) 48%,transparent 70%),
-    radial-gradient(ellipse at 50% 0%,rgba(255,92,197,.27),transparent 58%),
-    radial-gradient(ellipse at 0% 100%,rgba(196,74,255,.22),transparent 45%),
-    linear-gradient(145deg,rgba(42,13,57,.98),rgba(17,7,34,.99) 72%)!important;
-  box-shadow:0 18px 55px rgba(0,0,0,.5),0 0 28px rgba(255,91,195,.16)!important;
-  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
-  overflow:hidden!important;
-}
-#shahoodiNoteCard h2{
-  margin:8px 0 22px!important;
-  font-family:'Cairo',sans-serif!important;font-weight:800!important;
-  font-size:clamp(27px,6vw,39px)!important;line-height:1.6!important;
-  color:#ffd2ee!important;
-  text-shadow:0 0 12px rgba(255,137,216,.72),0 0 34px rgba(224,75,187,.4)!important;
-}
-#shahoodiNoteCard p{
-  font-family:'Cairo',sans-serif!important;
-  font-size:clamp(16px,3.6vw,20px)!important;
-  line-height:2.15!important;font-weight:400!important;
-  color:#f6e7f4!important;text-shadow:0 0 12px rgba(255,199,237,.08)!important;
-}
-#shahoodiNoteCard p strong{color:#ffbfe4!important;text-shadow:0 0 14px rgba(255,105,195,.5)!important;font-weight:800!important}
-#shahoodiNoteClose{
-  top:14px!important;right:14px!important;width:40px!important;height:40px!important;
-  border:1px solid rgba(255,205,242,.38)!important;background:rgba(255,255,255,.07)!important;
-  color:#fff4fc!important;box-shadow:0 0 18px rgba(255,100,200,.14)!important;
-}
-@media(max-width:600px){#shahoodiNoteCard{padding:50px 22px 30px!important;border-radius:25px!important}#shahoodiNoteCard p{line-height:2!important}}
-</style>
-
-
-<style id="performance-candle-music-fix">
-/* أداء أخف: نخلي المؤثرات تعتمد على transform/opacity قدر الإمكان */
-.candle, .flame, .smoke, .music-control, .music-control::before, .music-control::after {
-  will-change: transform, opacity;
-}
-.candle.off .smoke {
-  filter: none !important;
-  box-shadow: none !important;
-}
-.music-control.playing::before,
-.music-control.playing::after {
-  filter: none !important;
-}
-@media (prefers-reduced-motion: reduce) {
-  .flame, .music-control::before, .music-control::after { animation: none !important; }
-}
-</style>
-</body>
-</html>
-
-<script id="shahoodi-auto-finale">
-(()=>{const final=document.getElementById('finalScreen');if(!final)return;let fired=false;const trigger=()=>{if(fired)return;fired=true;const btn=document.getElementById('fireworksButton');if(btn){btn.click();setTimeout(()=>btn.click(),900);setTimeout(()=>btn.click(),1800)}else{const canvas=document.getElementById('fireworksCanvas');if(canvas){canvas.style.opacity='1';}}};if('IntersectionObserver'in window){const observer=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting&&e.intersectionRatio>.25)){trigger();observer.disconnect()}},{threshold:[.25,.5]});observer.observe(final)}else{window.addEventListener('scroll',()=>{if(final.getBoundingClientRect().top<innerHeight*.7)trigger()},{passive:true})}})();
 </script>
